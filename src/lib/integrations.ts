@@ -92,6 +92,7 @@ export type IntegrationEnvelope = {
   id: string;
   reference: string | null;
   senderEmail: string;
+  senderName: string;
   signers: Array<{
     email: string;
     name: string;
@@ -110,6 +111,7 @@ type EnvelopeRow = {
   id: string;
   reference: string | null;
   senderEmail: string;
+  senderName: string;
   status: string;
   title: string;
   userId: string;
@@ -162,7 +164,8 @@ export async function getIntegrationEnvelope(
         e.completed_at AS "completedAt",
         e.expires_at AS "expiresAt",
         e.integration_reference AS "reference",
-        u.email AS "senderEmail"
+        u.email AS "senderEmail",
+        u.name AS "senderName"
       FROM envelopes e
       JOIN public."user" u ON u.id = e.user_id
       WHERE e.id = $1
@@ -198,6 +201,7 @@ export async function getIntegrationEnvelope(
     id: envelope.id,
     reference: envelope.reference,
     senderEmail: envelope.senderEmail,
+    senderName: envelope.senderName,
     signers: signers.map((signer) => ({
       email: signer.email,
       name: signer.name,
