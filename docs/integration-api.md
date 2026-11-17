@@ -52,6 +52,12 @@ Returns `201` with the envelope (see below). `url` is where the sender places th
 
 `GET /api/integrations/envelopes/{id}/download?type=signed` returns the sealed PDF. `type=evidence` returns the audit certificate. Both are only available once the envelope is completed.
 
+## Give someone an account
+
+`POST /api/integrations/accounts` as JSON: `{ "email": "...", "name": "..." }`
+
+For people the other app has already confirmed, for example through its own sign-in. An existing account is marked verified and left otherwise alone (`200`, `{"status": "existing"}`). Otherwise a verified account is created with a password nobody knows, and SignuDoc emails the person its reset link so they can choose one (`201`, `{"status": "created"}`). The sign-up rule in Settings doesn't apply, the same as for the administrator made at setup.
+
 ## Database
 
 `db/migrations/20261120090000_integration_source.sql` adds `integration_source` and `integration_reference` to `envelopes`. It runs with the other migrations on deploy.
